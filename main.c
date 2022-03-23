@@ -109,7 +109,7 @@ void easyMode(int gameBoard[3][3])
 }
 task main()
 {
-    //1 for X, 0 for O, -1 for empty. We assume robot starts at [0][0] for convinience (upper left corner)
+    //1 for X, -1 for O, 0 for empty. We assume robot starts at [0][0] for convinience (upper left corner)
     int gameboard[3][3] = {{-1}};
     
     //Starting Game

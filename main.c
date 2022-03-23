@@ -6,6 +6,7 @@
     - Create 'hard' mode intelligence for robot
     - Clean up main function, logic for gameOver and ensure robot works as expected
 */
+const int SQUARESIZE = 25;
 
 void configureSensors()
 {
@@ -27,9 +28,46 @@ void penUp()
     {}
     motor[motorB] = 0;
 }
-void drive(int currentSquare, int futureSquare)
-{
 
+void driveTo(int horizontal, int vertical)
+{
+    const int SPEED = 20;
+    int enc_horizontal = (SQUARESIZE * horizontal) * 360 / (2PI2.75);
+    int enc_vertical = (SQUARESIZE * vertical) * 360 / (2PI2.75);
+
+    nMotorEncoder[motorA] = 0;
+    motor[motorA] = motor[motorD] = SPEED;
+    while (abs(nMotorEncoder[motorA]) < enc_horizontal)
+    {}
+    motor[motorA] = motor[motorD] = 0;
+    wait1Msec(1000);
+    rotateAngle(-90,10);
+    nMotorEncoder[motorA] = 0;
+    motor[motorA] = motor[motorD] = SPEED;
+    while (abs(nMotorEncoder[motorA]) < enc_vertical)
+    {}
+    motor[motorA] = motor[motorD] = 0;
+    wait1Msec(1000);
+}
+void driveBack(int horizontal, int vertical)
+{
+    const int SPEED = 20;
+    int enc_horizontal = (SQUARESIZE * horizontal) * 360 / (2PI2.75);
+    int enc_vertical = (SQUARESIZE * vertical) * 360 / (2PI2.75);
+
+    nMotorEncoder[motorA] = 0;
+    motor[motorA] = motor[motorD] = -SPEED;
+    while (abs(nMotorEncoder[motorA]) < enc_vertical)
+    {}
+    motor[motorA] = motor[motorD] = 0;
+    wait1Msec(1000);
+    rotateAngle(90,10);
+    nMotorEncoder[motorA] = 0;
+    motor[motorA] = motor[motorD] = -SPEED;
+    while (abs(nMotorEncoder[motorA]) < enc_horizontal)
+    {}
+    motor[motorA] = motor[motorD] = 0;
+    wait1Msec(1000);
 }
 void drawFunction(int xORo)
 {

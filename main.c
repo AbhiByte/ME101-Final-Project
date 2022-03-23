@@ -8,10 +8,115 @@
 */
 const int SQUARESIZE = 25;
 
+void PlayerMove(int gameBoard[3][3], int letter)
+{
+        int currentX = 1;
+        int currentY = 1;
+    //waiting for enter to confirm selection
+    while(!getButtonPress(buttonEnter))
+    {
+        //draw empty board with x to chose location (x may need to change if player is o for clarity)
+        char choice[3][3] = {' ',' ',' ',' ','X',' ',' ',' ',' '};
+        displayString(3, "%s|%s|%s",choice[0][0],choice[0][1],choice[0][2]);
+        displayString(4, "-----");
+        displayString(5, "%s|%s|%s",choice[1][0],choice[1][1],choice[1][2]);
+        displayString(6, "-----");
+        displayString(7, "%s|%s|%s",choice[1][0],choice[1][1],choice[1][2]);
+        //check for button press and which button is pressed, if enter is pressed it will skip all and recheck the outter while loop and end
+        while(!getButtonPress(buttonAny))
+        {}
+        if(getButtonPress(buttonUp))
+        {
+            choice[currentX][currentY] = 0;
+            currentY++;
+            choice[currentX][currentY] = 1;
+        }
+        if(getButtonPress(buttonDown))
+        {
+            choice[currentX][currentY] = 0;
+            currentY--;
+            choice[currentX][currentY] = 1;
+        }
+        if(getButtonPress(buttonRight))
+        {
+            choice[currentX][currentY] = 0;
+            currentX++;
+            choice[currentX][currentY] = 1;
+        }
+        if(getButtonPress(buttonLeft))
+        {
+            choice[currentX][currentY] = 0;
+            currentX--;
+            choice[currentX][currentY] = 1;
+        }
+    }
+    gameBoard[currentX][currentY] = letter;
+}
+int GameOver(int gameBoard[3][3])
+{
+    //check row victory
+    int sum = 0;
+    int count1 =0;
+    while(abs(sum) < 3 && count1 < 3)
+    {
+        sum = 0;
+        for(int count2 = 0; count2 < 3; count2++)
+        {
+            sum += gameBoard[count1][count2];
+        }
+        count1++;
+    }
+    //check col victory
+    count1 = 0;
+    if(abs(sum) != 3)
+    {
+        while(abs(sum) < 3 && count1 < 3)
+        {
+            sum = 0;
+            for(int count2 = 0; count2 < 3; count2++)
+            {
+                sum += gameBoard[count2][count1];
+            }
+            count1++;
+        }
+    }
+    //check for left diagoal victory
+    if(abs(sum) != 3)
+    {
+        sum = 0;
+        for(int count = 0; count < 3; count++)
+            sum += gameBoard[count][count];
+    }
+    //check for right diagoal victory
+    if(abs(sum) != 3)
+    {
+        sum = 0;
+        for(int count3 = 2; count3 >= 0; count3--)
+        {
+            int count2 = 2-count3;
+            sum += gameBoard[count3][count2];
+        }
+    }
+    //return values
+    if(sum == 3)
+        return 1;
+    else if(sum == -3)
+        return -1;
+    else
+        return 0;
+}
 void configureSensors()
 {
-
+    SensorType[S1] = sensorEV3_Touch;
+    SensorType[S2] = sensorEV3_Ultrasonic;
+    SensorType[S3] = sensorEV3_Color;
+    SensorType[S4] = sensorEV3_Gyro;
+    wait1Msec(50);
+    Sensormode = modeEV3Gyro_Calibration;
+    wait1Msec(50);
+    Sensormode = modeEV3Gyro_RateAndAngle;
 }
+
 void penDown()
 {
     nMotorEncoder[motorB] = 0;

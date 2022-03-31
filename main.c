@@ -86,7 +86,6 @@ void driveBack()
 	while (SensorValue(S3) != (int)colorBlue)
 	{}
 	motor[motorA] = motor[motorD] = 0;
-	//wait1Msec(1000);
 	rotateAngle(90,10);
 	motor[motorA] = motor[motorD] = -SPEED;
 
@@ -101,7 +100,6 @@ void driveBack()
 void movement(int distance, int motorPower)
 {
 	nMotorEncoder[motorA] = 0;
-	//motor[motorA] = motor[motorD] = 0;
 	motor[motorA] = motor[motorD] = motorPower;
 	while (fabs(nMotorEncoder[motorA]) < distance) //drive forward
 	{}
@@ -152,7 +150,7 @@ void PlayerMove(int letter)
 		}
 		while(!getButtonPress(buttonEnter))
 		{
-			//draw empty board with x to chose location (x may need to change if player is o for clarity)
+			//draw empty board with x to chose location
 
 			displayString(3, "%c|%c|%c",choice[0][0],choice[0][1],choice[0][2]);
 			displayString(4, "-----");
@@ -163,8 +161,6 @@ void PlayerMove(int letter)
 			while(getButtonPress(buttonAny))
 			{}
 			wait1Msec(50);
-			//while(!getButtonPress(buttonAny))
-			//{}
 			if(getButtonPress(buttonUp) && currentY != 0)
 			{
 				choice[currentY][currentX] = ' ';
@@ -224,7 +220,6 @@ void easyMode(int letter)
 			displayString(15, "%d", gameBoard[row][col]);
 			if (gameBoard[row][col] == 0)
 			{
-				//Not entirely complete
 				displayString(15, "row: %d col: %d", row, col);
 				gameBoard[row][col] = letter;
 				driveTo(row, col);
@@ -437,7 +432,6 @@ void hardMode(int letter)
 			}
 		}
 		if (sum == 2*-letter){
-			//temp for testing
 			gameBoard[row][col] = letter;
 			driveTo(row,col);
 			if (letter == 1)
@@ -453,11 +447,6 @@ void hardMode(int letter)
 		else
 		{
 			//check if it can make 2 in a row in a free space
-
-
-
-
-
 			int avaliable = 0;
 			for(int count2 = 0; count2 < 3; count2++)
 			{
@@ -487,7 +476,6 @@ void hardMode(int letter)
 				}
 			}
 
-			//temp for testing
 			gameBoard[row][col] = letter;
 			driveTo(row,col);
 			if (letter == 1)
@@ -579,7 +567,7 @@ task main()
 	eraseDisplay();
 	wait1Msec(250);
 
-	//Deciding who goes first (this can be changed later)
+	//Deciding who goes first
 	displayString(1, "Press UP to go first,");
 	displayString(2, "DOWN for robot goes first");
 
@@ -605,9 +593,6 @@ task main()
 		letter = -1;
 	}
 	wait1Msec(250);
-
-	//Main game loop
-	//eraseDisplay();
 
 	configureSensors();
 
@@ -637,7 +622,6 @@ task main()
 			hardMode(letter*-1);
 		}
 		whoseTurn*= -1;
-		//displayString(13, "%d", whoseTurn);
 		numTurns++;
 		gameDone = GameOver();
 	}
